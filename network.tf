@@ -60,29 +60,3 @@ resource "aws_route_table_association" "public_02" {
   subnet_id      = aws_subnet.public_02.id
   route_table_id = aws_route_table.public.id
 }
-
-resource "aws_security_group" "eks_nodes" {
-  name        = "trendstore-eks-nodes-sg"
-  description = "Security group for EKS worker nodes to allow application access on NodePort"
-  vpc_id      = aws_vpc.trendstore.id
-
-  ingress {
-    description = "Allow application access via NodePort from anywhere"
-    from_port   = 30000
-    to_port     = 32767
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    description = "Allow all outbound traffic"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "trendstore-eks-nodes-sg"
-  }
-}
