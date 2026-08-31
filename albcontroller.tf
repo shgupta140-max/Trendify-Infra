@@ -1,10 +1,8 @@
-# 1. Look up the cluster and OIDC details dynamically using your variable
-data "aws_eks_cluster" "cluster" {
-  name = var.eks_cluster_name
-}
+# 1. Use the cluster resource created by this Terraform stack
+#    instead of reading it dynamically from AWS during destroy.
 
 data "aws_iam_openid_connect_provider" "oidc" {
-  url = data.aws_eks_cluster.cluster.identity[0].oidc[0].issuer
+  url = aws_eks_cluster.trendstore.identity[0].oidc[0].issuer
 }
 
 # 2. Fetch the official AWS Load Balancer Controller IAM policy
@@ -28,13 +26,13 @@ data "aws_iam_policy_document" "lbc_assume_role_policy" {
 
     condition {
       test     = "StringEquals"
-      variable = "${replace(data.aws_eks_cluster.cluster.identity[0].oidc[0].issuer, "https://", "")}:aud"
+      variable = "${replace(aws_eks_cluster.trendstore.identity[0].oidc[0].issuer, "https://", "")}:aud"
       values   = ["sts.amazonaws.com"]
     }
 
     condition {
       test     = "StringEquals"
-      variable = "${replace(data.aws_eks_cluster.cluster.identity[0].oidc[0].issuer, "https://", "")}:sub"
+      variable = "${replace(aws_eks_cluster.trendstore.identity[0].oidc[0].issuer, "https://", "")}:sub"
       values   = ["system:serviceaccount:kube-system:aws-load-balancer-controller"]
     }
 
@@ -66,7 +64,7 @@ resource "helm_release" "aws_load_balancer_controller" {
 
   set {
     name  = "clusterName"
-    value = var.eks_cluster_name
+    value = aws_eks_cluster.trendstore.name
   }
 
   set {
@@ -88,6 +86,7 @@ resource "helm_release" "aws_load_balancer_controller" {
     name  = "vpcId"
     value = aws_vpc.trendstore.id
   }
+
   depends_on = [
     aws_iam_role_policy_attachment.lbc_iam_role_attachment
   ]
