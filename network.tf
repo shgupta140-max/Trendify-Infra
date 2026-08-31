@@ -16,6 +16,8 @@ resource "aws_subnet" "public_01" {
 
   tags = {
     Name = "trend-pub-sub01"
+    "kubernetes.io/cluster/${var.eks_cluster_name}" = "owned" # or "shared"
+    "kubernetes.io/role/elb"         = "1"
   }
 }
 
@@ -27,6 +29,8 @@ resource "aws_subnet" "public_02" {
 
   tags = {
     Name = "trend-pub-sub02"
+    "kubernetes.io/cluster/${var.eks_cluster_name}" = "owned" # or "shared"
+    "kubernetes.io/role/elb"         = "1"
   }
 }
 

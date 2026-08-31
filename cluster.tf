@@ -30,10 +30,10 @@ resource "aws_eks_node_group" "trendstore" {
   node_group_name = "trendstore-ng"
   node_role_arn   = aws_iam_role.eks_node_group.arn
   subnet_ids      = [aws_subnet.public_01.id, aws_subnet.public_02.id]
-  ami_type       = "AL2023_x86_64_STANDARD"
-  capacity_type  = var.eks_node_capacity_type
-  disk_size      = 20
-  instance_types = [var.eks_node_instance_type]
+  ami_type        = "AL2023_x86_64_STANDARD"
+  capacity_type   = var.eks_node_capacity_type
+  disk_size       = 20
+  instance_types  = [var.eks_node_instance_type]
 
   scaling_config {
     desired_size = var.eks_node_desired_size
