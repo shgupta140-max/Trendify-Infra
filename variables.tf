@@ -31,13 +31,13 @@ variable "eks_cluster_name" {
 variable "eks_cluster_version" {
   description = "Kubernetes version for the EKS cluster"
   type        = string
-  default     = "1.31"
+  default     = "1.36"
 }
 
 variable "eks_node_instance_type" {
-  description = "Free-tier eligible EC2 instance type for a personal EKS workload"
+  description = "EC2 instance type used for the EKS managed node group. t3.small is a safer default than t3.micro for EKS bootstrap and node health."
   type        = string
-  default     = "t3.micro"
+  default     = "t2.medium"
 }
 
 variable "eks_node_desired_size" {
@@ -67,5 +67,5 @@ variable "eks_node_capacity_type" {
 variable "cluster_admin_principals" {
   description = "List of IAM principal ARNs that should be granted cluster admin access to the EKS cluster and AWS EKS Console"
   type        = list(string)
-  default     = ["arn:aws:iam::409415529933:user/terraform-user", "arn:aws:iam::409415529933:user/eks-console-admin"]
+  default     = ["arn:aws:iam::409415529933:user/terraform-user", "arn:aws:iam::409415529933:root"]
 }

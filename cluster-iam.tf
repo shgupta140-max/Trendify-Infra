@@ -7,7 +7,10 @@ data "aws_iam_policy_document" "eks_assume_role" {
       identifiers = ["eks.amazonaws.com"]
     }
 
-    actions = ["sts:AssumeRole"]
+    actions = [
+      "sts:AssumeRole",
+      "sts:TagSession",
+    ]
   }
 }
 
@@ -23,6 +26,26 @@ resource "aws_iam_role_policy_attachment" "eks_cluster_policy" {
 
 resource "aws_iam_role_policy_attachment" "eks_vpc_resource_controller" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
+  role       = aws_iam_role.eks_cluster.name
+}
+
+resource "aws_iam_role_policy_attachment" "eks_block_storage_policy_v2" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSBlockStoragePolicyV2"
+  role       = aws_iam_role.eks_cluster.name
+}
+
+resource "aws_iam_role_policy_attachment" "eks_compute_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSComputePolicy"
+  role       = aws_iam_role.eks_cluster.name
+}
+
+resource "aws_iam_role_policy_attachment" "eks_load_balancing_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSLoadBalancingPolicy"
+  role       = aws_iam_role.eks_cluster.name
+}
+
+resource "aws_iam_role_policy_attachment" "eks_networking_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSNetworkingPolicy"
   role       = aws_iam_role.eks_cluster.name
 }
 

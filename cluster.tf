@@ -25,14 +25,34 @@ resource "aws_eks_cluster" "trendstore" {
   }
 }
 
+resource "aws_launch_template" "eks_node" {
+  name_prefix = "trendstore-node-"
+
+  vpc_security_group_ids = [aws_security_group.eks_nodes.id]
+
+  tag_specifications {
+    resource_type = "instance"
+    tags = {
+      Name = "trendstore-node"
+    }
+  }
+}
+
 resource "aws_eks_node_group" "trendstore" {
   cluster_name    = aws_eks_cluster.trendstore.name
   node_group_name = "trendstore-ng"
   node_role_arn   = aws_iam_role.eks_node_group.arn
   subnet_ids      = [aws_subnet.public_01.id, aws_subnet.public_02.id]
 
+  ami_type       = "AL2023_x86_64_STANDARD"
   capacity_type  = var.eks_node_capacity_type
+  disk_size      = 20
   instance_types = [var.eks_node_instance_type]
+
+  launch_template {
+    id      = aws_launch_template.eks_node.id
+    version = aws_launch_template.eks_node.latest_version
+  }
 
   scaling_config {
     desired_size = var.eks_node_desired_size
@@ -45,6 +65,7 @@ resource "aws_eks_node_group" "trendstore" {
   }
 
   depends_on = [
+    aws_eks_cluster.trendstore,
     aws_iam_role_policy_attachment.eks_worker_node_policy,
     aws_iam_role_policy_attachment.eks_cni_policy,
     aws_iam_role_policy_attachment.eks_container_registry_readonly,
@@ -58,10 +79,9 @@ resource "aws_eks_node_group" "trendstore" {
 resource "aws_eks_access_entry" "cluster_admin" {
   for_each = toset(var.cluster_admin_principals)
 
-  cluster_name      = aws_eks_cluster.trendstore.name
-  principal_arn     = each.value
-  kubernetes_groups = ["system:masters"]
-  type              = "STANDARD"
+  cluster_name  = aws_eks_cluster.trendstore.name
+  principal_arn = each.value
+  type          = "STANDARD"
 }
 
 resource "aws_eks_access_policy_association" "cluster_admin" {
