@@ -49,7 +49,7 @@ pipeline {
                 timeout(time: 1, unit: 'HOURS')
             }
             steps {
-                slackSend(message: "*Action Required:* Pipeline is waiting for manual approval to deploy to Production.\nRunning Terraform Apply in region: ${env.REGION} for cluster: ${env.CLUSTER_NAME}. Please approve here - ${env.BUILD_URL}/console", 
+                slackSend(message: "*Action Required:* Pipeline is waiting for manual approval to deploy to Production.\nRunning Terraform Apply in region: ${env.REGION} for cluster: ${env.CLUSTER_NAME}. Please approve here - ${env.BUILD_URL}console", 
                 channel: "${env.SLACK_APPROVAL_CHANNEL}", 
                 color: '#050505')
                 
