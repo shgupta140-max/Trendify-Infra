@@ -62,30 +62,28 @@ resource "helm_release" "aws_load_balancer_controller" {
   namespace  = "kube-system"
   version    = "1.9.0"
 
-  set {
-    name  = "clusterName"
-    value = aws_eks_cluster.trendstore.name
-  }
-
-  set {
-    name  = "serviceAccount.create"
-    value = "true"
-  }
-
-  set {
-    name  = "serviceAccount.name"
-    value = "aws-load-balancer-controller"
-  }
-
-  set {
-    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = aws_iam_role.lbc_iam_role.arn
-  }
-
-  set {
-    name  = "vpcId"
-    value = aws_vpc.trendstore.id
-  }
+  set = [
+    {
+      name  = "clusterName"
+      value = aws_eks_cluster.trendstore.name
+    },
+    {
+      name  = "serviceAccount.create"
+      value = "true"
+    },
+    {
+      name  = "serviceAccount.name"
+      value = "aws-load-balancer-controller"
+    },
+    {
+      name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+      value = aws_iam_role.lbc_iam_role.arn
+    },
+    {
+      name  = "vpcId"
+      value = aws_vpc.trendstore.id
+    }
+  ]
 
   depends_on = [
     aws_iam_role_policy_attachment.lbc_iam_role_attachment

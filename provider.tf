@@ -20,7 +20,7 @@ terraform {
 
     helm = {
       source  = "hashicorp/helm"
-      version = "~> 2.0"
+      version = "~> 3.0"
     }
     http = {
       source  = "hashicorp/http"
@@ -34,11 +34,11 @@ provider "aws" {
 }
 
 provider "helm" {
-  kubernetes {
+  kubernetes = {
     host                   = aws_eks_cluster.trendstore.endpoint
     cluster_ca_certificate = base64decode(aws_eks_cluster.trendstore.certificate_authority[0].data)
 
-    exec {
+    exec = {
       api_version = "client.authentication.k8s.io/v1beta1"
       command     = "aws"
       args = [
