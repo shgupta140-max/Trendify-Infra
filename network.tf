@@ -15,9 +15,9 @@ resource "aws_subnet" "public_01" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "trend-pub-sub01"
+    Name                                            = "trend-pub-sub01"
     "kubernetes.io/cluster/${var.eks_cluster_name}" = "owned" # or "shared"
-    "kubernetes.io/role/elb"         = "1"
+    "kubernetes.io/role/elb"                        = "1"
   }
 }
 
@@ -28,9 +28,9 @@ resource "aws_subnet" "public_02" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "trend-pub-sub02"
+    Name                                            = "trend-pub-sub02"
     "kubernetes.io/cluster/${var.eks_cluster_name}" = "owned" # or "shared"
-    "kubernetes.io/role/elb"         = "1"
+    "kubernetes.io/role/elb"                        = "1"
   }
 }
 

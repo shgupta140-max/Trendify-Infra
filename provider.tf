@@ -3,7 +3,7 @@ terraform {
 
   backend "s3" {
     bucket  = "trendstore-infra-state"
-    key     = "trendstore/terraform.tfstate"
+    key     = "trendstore/infra/terraform.tfstate"
     region  = "ap-south-1"
     encrypt = true
   }
