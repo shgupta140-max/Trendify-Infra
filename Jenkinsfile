@@ -8,7 +8,7 @@ pipeline {
     environment {
         REGION = 'ap-south-1'
         CLUSTER_NAME = 'trendstore-cluster'
-        SLACK_APPROVAL_CHANNEL = '#terraform-approvals'
+        SLACK_APPROVAL_CHANNEL = '#trendify-approvals'
         SLACK_NOTIFICATION_CHANNEL = '#trendify-notifications'
     }
 
