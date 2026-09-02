@@ -54,7 +54,7 @@ pipeline {
                 color: '#050505')
                 
                 input (
-                    message: 'Do you want to apply the Terraform changes for cluster: ${env.CLUSTER_NAME} in region: ${env.REGION}?',
+                    message: "Do you want to apply the Terraform changes for cluster: ${env.CLUSTER_NAME} in region: ${env.REGION}?",
                     ok: 'Apply'
                 )
                 
