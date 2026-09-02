@@ -43,7 +43,7 @@ pipeline {
 
         stage('Terraform Apply') {
             when {
-                expression { return env.BRANCH_NAME == 'main' }
+                expression { return env.GIT_BRANCH == 'main' }
             }
             options {
                 timeout(time: 1, unit: 'HOURS')
