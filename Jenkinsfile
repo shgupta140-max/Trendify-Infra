@@ -53,10 +53,10 @@ pipeline {
                 channel: "${env.SLACK_APPROVAL_CHANNEL}", 
                 color: '#050505')
                 
-                input {
-                    message "Do you want to apply the Terraform changes for cluster: ${env.CLUSTER_NAME} in region: ${env.REGION}?"
-                    ok "Apply"
-                }
+                input (
+                    message: 'Do you want to apply the Terraform changes for cluster: ${env.CLUSTER_NAME} in region: ${env.REGION}?',
+                    ok: 'Apply'
+                )
                 
                 echo "Applying Terraform changes in region: ${env.REGION} for cluster: ${env.CLUSTER_NAME}"
                 sh 'terraform apply tfplan'
