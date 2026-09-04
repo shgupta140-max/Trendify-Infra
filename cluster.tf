@@ -84,3 +84,17 @@ resource "aws_eks_access_policy_association" "cluster_admin" {
 
   depends_on = [aws_eks_access_entry.cluster_admin]
 }
+
+resource "aws_eks_access_policy_association" "jenkins_admin" {
+  cluster_name  = aws_eks_cluster.trendstore.name
+  policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+  principal_arn = aws_eks_access_entry.jenkins_admin.principal_arn
+
+  access_scope {
+    type = "cluster"
+  }
+
+  depends_on = [aws_eks_access_entry.jenkins_admin]
+}
+
+
