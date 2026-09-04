@@ -65,6 +65,12 @@ resource "aws_eks_access_entry" "cluster_admin" {
   type          = "STANDARD"
 }
 
+resource "aws_eks_access_entry" "jenkins_admin" {
+  cluster_name  = aws_eks_cluster.trendstore.name
+  principal_arn = var.jenkins_admin_principal_arn
+  type          = "EC2"
+}
+
 resource "aws_eks_access_policy_association" "cluster_admin" {
   for_each = aws_eks_access_entry.cluster_admin
 
