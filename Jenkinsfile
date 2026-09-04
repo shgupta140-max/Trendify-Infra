@@ -16,7 +16,7 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 echo "Initializing Terraform in region: ${env.REGION} for cluster: ${env.CLUSTER_NAME}"
-                sh 'terraform init'
+                sh 'terraform init -upgrade'
             }
         }
 
