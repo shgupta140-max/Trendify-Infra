@@ -54,6 +54,7 @@ resource "aws_iam_role_policy_attachment" "lbc_iam_role_attachment" {
 }
 
 # 6. Deploy the Controller via Helm
+# 7. Deploy the Controller via Helm
 resource "helm_release" "aws_load_balancer_controller" {
   name       = "aws-load-balancer-controller"
   repository = "https://aws.github.io/eks-charts"
@@ -61,27 +62,19 @@ resource "helm_release" "aws_load_balancer_controller" {
   namespace  = "kube-system"
   version    = "1.9.0"
 
-  set = [
-    {
-      name  = "clusterName"
-      value = aws_eks_cluster.trendstore.name
-    },
-    {
-      name  = "serviceAccount.create"
-      value = "true"
-    },
-    {
-      name  = "serviceAccount.name"
-      value = "aws-load-balancer-controller"
-    },
-    {
-      name  = "serviceAccount.annotations.eks.amazonaws.com/role-arn"
-      value = aws_iam_role.lbc_iam_role.arn
-    },
-    {
-      name  = "vpcId"
-      value = aws_vpc.trendstore.id
-    }
+  # Use yamlencode to bypass Helm's problematic dot parser
+  values = [
+    yamlencode({
+      clusterName = aws_eks_cluster.trendstore.name
+      vpcId       = aws_vpc.trendstore.id
+      serviceAccount = {
+        create = true
+        name   = "aws-load-balancer-controller"
+        annotations = {
+          "eks.amazonaws.com/role-arn" = aws_iam_role.lbc_iam_role.arn
+        }
+      }
+    })
   ]
 
   depends_on = [
