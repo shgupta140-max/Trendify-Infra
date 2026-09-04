@@ -54,7 +54,6 @@ resource "aws_iam_role_policy_attachment" "lbc_iam_role_attachment" {
 }
 
 # 6. Deploy the Controller via Helm
-# 7. Deploy the Controller via Helm
 resource "helm_release" "aws_load_balancer_controller" {
   name       = "aws-load-balancer-controller"
   repository = "https://aws.github.io/eks-charts"
